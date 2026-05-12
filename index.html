@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Application d'entraînement BP23REC : étude de cas, questions corrigées, notions de cours et progression." />
+  <meta name="theme-color" content="#e84f8a" />
+
+  <title>BP23REC — Entraînement</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header__content">
+        <p class="eyebrow">BP23REC · Méthodes et techniques de recherche</p>
+        <h1>Entraînement à l’examen</h1>
+        <p class="app-header__subtitle">
+          Étude de cas, correction immédiate et notions du cours débloquées progressivement.
+        </p>
+      </div>
+      <div class="app-header__badge" aria-label="Mode entraînement">Mode entraînement</div>
+    </header>
+
+    <main class="app-main">
+      <section id="view-home" class="view view--active" data-view="home" aria-labelledby="home-title">
+        <div class="hero-card">
+          <p class="section-kicker">Cours #2 et #7</p>
+          <h2 id="home-title">Étude de cas : fluctuations journalières de l’attention</h2>
+          <p>
+            Cette application te permet de travailler l’étude de cas comme à l’examen :
+            lecture de l’énoncé, réponse question par question, correction immédiate,
+            puis lien avec les notions du cours.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn--primary" type="button" data-go-to="case">Lire l’énoncé</button>
+            <button class="btn btn--secondary" type="button" data-go-to="questions">Commencer les questions</button>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Objectif</h3>
+            <p>Analyser une situation de recherche en mobilisant l’épistémologie, l’éthique scientifique et le lien recherche-pratique.</p>
+          </article>
+          <article class="info-card">
+            <h3>Format</h3>
+            <p>Une question par écran, avec correction immédiate : réponse correcte, pourquoi, notion à retenir et lien avec le cours.</p>
+          </article>
+          <article class="info-card">
+            <h3>Progression</h3>
+            <p>Les réponses et les notions débloquées sont sauvegardées sur ton appareil.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-case" class="view" data-view="case" aria-labelledby="case-title">
+        <div class="section-heading">
+          <p class="section-kicker">Étude de cas</p>
+          <h2 id="case-title">L’énoncé</h2>
+          <p>L’énoncé est présenté de manière fidèle au PDF pour t’entraîner au format de l’examen.</p>
+        </div>
+
+        <div id="case-study-container" class="case-study">
+          <noscript>Active JavaScript pour afficher l’énoncé interactif.</noscript>
+        </div>
+
+        <div class="case-figure">
+          <div class="case-figure__header">
+            <h3>Graphique de l’étude</h3>
+            <button class="btn btn--small" type="button" id="open-graph-modal" aria-haspopup="dialog">Agrandir</button>
+          </div>
+          <img id="case-graph" src="assets/images/graphique-attention.png" alt="Graphique représentant le nombre de signes bien traités en GS et en CP selon quatre moments de la journée." class="case-figure__image" />
+        </div>
+      </section>
+
+      <section id="view-questions" class="view" data-view="questions" aria-labelledby="questions-title">
+        <div class="section-heading">
+          <p class="section-kicker">Entraînement guidé</p>
+          <h2 id="questions-title">Questions</h2>
+          <p>Réponds à une question, valide, puis lis directement la correction.</p>
+        </div>
+
+        <div class="quiz-status" aria-live="polite">
+          <div>
+            <span class="quiz-status__label">Question</span>
+            <strong id="current-question-indicator">1 / 10</strong>
+          </div>
+          <div>
+            <span class="quiz-status__label">Score</span>
+            <strong id="score-indicator">0 / 0</strong>
+          </div>
+        </div>
+
+        <article id="question-card" class="question-card">
+          <noscript>Active JavaScript pour utiliser le quiz interactif.</noscript>
+        </article>
+
+        <article id="correction-card" class="correction-card correction-card--hidden" aria-live="polite"></article>
+
+        <div class="quiz-actions">
+          <button id="previous-question-btn" class="btn btn--ghost" type="button">Question précédente</button>
+          <button id="next-question-btn" class="btn btn--primary" type="button">Question suivante</button>
+        </div>
+      </section>
+
+      <section id="view-notions" class="view" data-view="notions" aria-labelledby="notions-title">
+        <div class="section-heading">
+          <p class="section-kicker">Révision progressive</p>
+          <h2 id="notions-title">Notions débloquées</h2>
+          <p>Les notions apparaissent au fur et à mesure des questions corrigées.</p>
+        </div>
+
+        <div id="notions-empty-state" class="empty-state">
+          <h3>Aucune notion débloquée pour l’instant</h3>
+          <p>Commence les questions pour débloquer progressivement les notions du cours.</p>
+          <button class="btn btn--primary" type="button" data-go-to="questions">Commencer les questions</button>
+        </div>
+        <div id="notions-container" class="notions-grid"></div>
+      </section>
+
+      <section id="view-progress" class="view" data-view="progress" aria-labelledby="progress-title">
+        <div class="section-heading">
+          <p class="section-kicker">Suivi</p>
+          <h2 id="progress-title">Progression</h2>
+          <p>Cette section résume ton avancement, ton score et les notions à revoir.</p>
+        </div>
+
+        <div class="progress-grid">
+          <article class="progress-card">
+            <span class="progress-card__label">Questions répondues</span>
+            <strong id="answered-count">0 / 10</strong>
+          </article>
+          <article class="progress-card">
+            <span class="progress-card__label">Bonnes réponses</span>
+            <strong id="correct-count">0</strong>
+          </article>
+          <article class="progress-card">
+            <span class="progress-card__label">Notions débloquées</span>
+            <strong id="unlocked-count">0</strong>
+          </article>
+        </div>
+
+        <article class="review-card">
+          <h3>À retravailler</h3>
+          <div id="review-list"><p class="muted">Les notions à retravailler apparaîtront après tes premières réponses.</p></div>
+        </article>
+
+        <div class="progress-actions">
+          <button id="review-errors-btn" class="btn btn--secondary" type="button">Revoir mes erreurs</button>
+          <button id="restart-training-btn" class="btn btn--ghost" type="button">Recommencer l’entraînement</button>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view" data-view="settings" aria-labelledby="settings-title">
+        <div class="section-heading">
+          <p class="section-kicker">Application</p>
+          <h2 id="settings-title">Paramètres</h2>
+          <p>Réglages simples pour adapter l’usage de l’application.</p>
+        </div>
+
+        <div class="settings-list">
+          <label class="setting-row">
+            <span>
+              <strong>Réduire les animations</strong>
+              <small>Utile pour une lecture plus calme sur téléphone.</small>
+            </span>
+            <input id="reduce-motion-toggle" type="checkbox" />
+          </label>
+          <button id="reset-progress-btn" class="btn btn--danger" type="button">Réinitialiser ma progression</button>
+        </div>
+
+        <article class="about-card">
+          <h3>À propos</h3>
+          <p>Application d’entraînement construite pour travailler le module BP23REC à partir d’études de cas et de corrections guidées.</p>
+        </article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navigation principale">
+      <button class="bottom-nav__item bottom-nav__item--active" type="button" data-go-to="home"><span class="bottom-nav__icon" aria-hidden="true">⌂</span><span>Accueil</span></button>
+      <button class="bottom-nav__item" type="button" data-go-to="case"><span class="bottom-nav__icon" aria-hidden="true">☰</span><span>Énoncé</span></button>
+      <button class="bottom-nav__item" type="button" data-go-to="questions"><span class="bottom-nav__icon" aria-hidden="true">?</span><span>Questions</span></button>
+      <button class="bottom-nav__item" type="button" data-go-to="notions"><span class="bottom-nav__icon" aria-hidden="true">◆</span><span>Notions</span></button>
+      <button class="bottom-nav__item" type="button" data-go-to="progress"><span class="bottom-nav__icon" aria-hidden="true">✓</span><span>Suivi</span></button>
+      <button class="bottom-nav__item" type="button" data-go-to="settings"><span class="bottom-nav__icon" aria-hidden="true">⚙</span><span>Réglages</span></button>
+    </nav>
+  </div>
+
+  <div id="graph-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="graph-modal-title" hidden>
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2 id="graph-modal-title">Graphique de l’étude</h2>
+        <button class="modal__close" type="button" data-close-modal aria-label="Fermer l’image agrandie">×</button>
+      </div>
+      <img src="assets/images/graphique-attention.png" alt="Graphique représentant le nombre de signes bien traités en GS et en CP selon quatre moments de la journée." class="modal__image" />
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
